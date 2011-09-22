@@ -32,6 +32,11 @@ class ExpectTest
   def expect(expected:int)
     Expected.new(expected)
   end
+
+  def run_test(name:string)
+    puts name
+    # need to work out how to invoke the test..
+  end
 end
 
 class MatchersTest < ExpectTest
@@ -49,4 +54,12 @@ end
 test_class = MatchersTest.new
 test_class.test_int_equivalence
 test_class.test_int_greater_than
+
+methods = test_class.getClass.getDeclaredMethods
+methods.each do |method|
+  name = method.getName
+  if name.startsWith("test_")
+    test_class.run_test(name)
+  end
+end
 
