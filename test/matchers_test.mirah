@@ -9,10 +9,22 @@ class Expected
     self
   end
 
-  def to_equal(object:int)
-    assertion = @expected == object
-    result = @not_assertion ? !assertion : assertion
-    result
+  defmacro define_matcher(name, &block) do
+    quote do
+      def `name`(object:int)
+        @actual = object
+        assertion = `block.body`
+        @not_assertion ? !assertion : assertion
+      end
+    end
+  end
+
+  define_matcher 'to_equal' do
+    @expected == @actual
+  end
+
+  define_matcher 'to_be_greater_than' do
+    @expected > @actual
   end
 end
 
@@ -27,8 +39,14 @@ class MatchersTest < ExpectTest
     puts expect(123).to_equal(123)
     puts expect(123).not.to_equal(456)
   end
+
+  def test_int_greater_than
+    puts expect(2).to_be_greater_than(1)
+    puts expect(1).not.to_be_greater_than(2)
+  end
 end
 
 test_class = MatchersTest.new
 test_class.test_int_equivalence
+test_class.test_int_greater_than
 
