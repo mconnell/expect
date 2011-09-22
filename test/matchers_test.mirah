@@ -16,10 +16,19 @@ class Expected
   end
 end
 
-def expect(expected:int)
-  Expected.new(expected)
+class ExpectTest
+  def expect(expected:int)
+    Expected.new(expected)
+  end
 end
 
+class MatchersTest < ExpectTest
+  def test_int_equivalence
+    puts expect(123).to_equal(123)
+    puts expect(123).not.to_equal(456)
+  end
+end
 
-puts expect(123).to_equal(123)
-puts expect(123).not.to_equal(456)
+test_class = MatchersTest.new
+test_class.test_int_equivalence
+
