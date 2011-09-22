@@ -1,10 +1,18 @@
 class Expected
   def initialize(object:int)
     @expected = object
+    @not_assertion = false
+  end
+
+  def not
+    @not_assertion = true
+    self
   end
 
   def to_equal(object:int)
-    @expected == object
+    assertion = @expected == object
+    result = @not_assertion ? !assertion : assertion
+    result
   end
 end
 
@@ -13,7 +21,5 @@ def expect(expected:int)
 end
 
 
-
-
-puts expect(456).to_equal(456)
-puts expect(456).to_equal(123)
+puts expect(123).to_equal(123)
+puts expect(123).not.to_equal(456)
